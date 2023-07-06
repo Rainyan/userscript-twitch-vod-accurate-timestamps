@@ -16,23 +16,27 @@
 "use strict";
 
 const PREFIX = "VodDateScript-";
+const HTTP_OK = 200;
 
-// Gets user's stored app fieldName data value, or prompts for it if empty.
+// Returns a promise of user's stored app fieldName data value.
+// If no such field exists or it's empty, will prompt the user for the value.
 async function getUserAppData(fieldName) {
   const fieldNameInternal = `${PREFIX}${fieldName}`;
 
   var data = await GM_getValue(fieldNameInternal, null);
   if (data === null) {
     data = prompt(`Your Twitch API app's registered ${fieldName}: `);
-    await GM_setValue(fieldNameInternal, data);
+    GM_setValue(fieldNameInternal, data);
   }
   return data;
 }
 
+// Returns a promise of the Twitch app's "Client ID" value
 function getClientId() {
   return getUserAppData("clientId");
 }
 
+// Returns a promise of the Twitch app's "Client Secret" value
 function getClientSecret() {
   return getUserAppData("clientSecret");
 }
@@ -44,7 +48,7 @@ function getVideoId() {
   );
 }
 
-// Returns the timestamp element, or undefined if not found
+// Returns the timestamp's document element, or undefined if not found
 function getTimeStampElement() {
   const elems = document.getElementsByClassName("timestamp-metadata__bar");
   if (elems[0] === undefined) {
@@ -56,7 +60,8 @@ function getTimeStampElement() {
   return targetElem;
 }
 
-// Returns the timestamp element, or null on failure
+// Waits until the timestamp's document element appears,
+// and then returns it via a mutation observer.
 function findTimeStampElement() {
   return new Promise((resolve) => {
     var elem = getTimeStampElement();
@@ -94,7 +99,7 @@ async function validateBearerToken(auth) {
     },
   });
 
-  if (response.status !== 200) {
+  if (response.status !== HTTP_OK) {
     return 0;
   }
 
@@ -105,10 +110,18 @@ async function validateBearerToken(auth) {
   return expires_in_secs !== NaN ? expires_in_secs : 0;
 }
 
+// Returns the Unix epoch in whole seconds
 function getEpoch() {
   return parseInt(new Date() / 1000);
 }
 
+// Returns whether a HTTP status code is in the "Client error responses" range
+function isClientError(httpStatusCode) {
+	return httpStatusCode >= 400 && httpStatusCode <= 499;
+}
+
+// For a refresh token, will attempt to refresh the associated bearer token.
+// Returns a promise of the JSON response from the refresh API, or null on failure.
 async function refreshBearerToken(refreshToken) {
   const apiUrl = "https://id.twitch.tv/oauth2/token";
 
@@ -123,12 +136,12 @@ async function refreshBearerToken(refreshToken) {
     body: `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=${clientId}&client_secret=${clientSecret}`,
   });
 
-  if (response.status >= 400 && response.status <= 499) {
+  if (isClientError(response.status)) {
     GM_setValue(`${PREFIX}auth`, null);
     GM_setValue(`${PREFIX}clientId`, null);
     GM_setValue(`${PREFIX}clientSecret`, null);
   }
-  if (response.status !== 200) {
+  if (response.status !== HTTP_OK) {
     console.error("API call failed: " + response.status);
     return null;
   }
@@ -136,7 +149,7 @@ async function refreshBearerToken(refreshToken) {
   return response.json();
 }
 
-// Returns an API bearer token, or null on failure.
+// Returns a promise of the API bearer token, or null on failure.
 // Has the side effects of refreshing/creating/caching the token as necessary.
 async function getBearerToken() {
   const fieldName = `${PREFIX}auth`;
@@ -197,12 +210,12 @@ async function getBearerToken() {
     body: `client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`,
   });
 
-  if (response.status >= 400 && response.status <= 499) {
+  if (isClientError(response.status)) {
     GM_setValue(`${PREFIX}auth`, null);
     GM_setValue(`${PREFIX}clientId`, null);
     GM_setValue(`${PREFIX}clientSecret`, null);
   }
-  if (response.status !== 200) {
+  if (response.status !== HTTP_OK) {
     console.error("API call failed: " + response.status);
     return null;
   }
@@ -216,6 +229,7 @@ async function getBearerToken() {
   return auth.access_token;
 }
 
+// Asynchronously replaces the fuzzy timestamp with a more precise version as a side effect.
 async function replaceFuzzyTimestamp() {
   const vodId = getVideoId();
   if (vodId === NaN) {
@@ -238,7 +252,7 @@ async function replaceFuzzyTimestamp() {
   //console.log(`Accurate VOD timestamp: ${accurateDateString}`);
 }
 
-// Returns accurate VOD date, or null on failure
+// Returns a promise of the accurate VOD date, or null on failure
 async function getAccurateTimestamp(vodId) {
   const bearerToken = await getBearerToken();
   if (bearerToken === null) {
@@ -256,12 +270,12 @@ async function getAccurateTimestamp(vodId) {
     },
   });
 
-  if (response.status >= 400 && response.status <= 499) {
+  if (isClientError(response.status)) {
     GM_setValue(`${PREFIX}auth`, null);
     GM_setValue(`${PREFIX}clientId`, null);
     GM_setValue(`${PREFIX}clientSecret`, null);
   }
-  if (response.status !== 200) {
+  if (response.status !== HTTP_OK) {
     console.error("API call failed: " + response.status);
     return null;
   }
@@ -275,6 +289,7 @@ async function getAccurateTimestamp(vodId) {
   return new Date(data["data"][0]["created_at"]);
 }
 
+// Entry point
 function main() {
   replaceFuzzyTimestamp();
 }
