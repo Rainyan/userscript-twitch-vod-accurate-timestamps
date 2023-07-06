@@ -18,18 +18,13 @@
 const PREFIX = "VodDateScript-";
 
 // Gets user's stored app fieldName data value, or prompts for it if empty.
-function getUserAppData(fieldName) {
-  const fieldNameInternal = `${PREFIX}{fieldName}`;
+async function getUserAppData(fieldName) {
+  const fieldNameInternal = `${PREFIX}${fieldName}`;
 
-  // DEBUG
-  if (false) {
-    GM_setValue(fieldNameInternal, null);
-  }
-
-  var data = GM_getValue(fieldNameInternal, null);
+  var data = await GM_getValue(fieldNameInternal, null);
   if (data === null) {
     data = prompt(`Your Twitch API app's registered ${fieldName}: `);
-    GM_setValue(fieldNameInternal, data);
+    await GM_setValue(fieldNameInternal, data);
   }
   return data;
 }
@@ -90,7 +85,7 @@ async function validateBearerToken(auth) {
   console.assert(auth !== null);
   console.assert(auth.token_type === "bearer");
 
-  const apiUrl = "'https://id.twitch.tv/oauth2/validate";
+  const apiUrl = "https://id.twitch.tv/oauth2/validate";
 
   const response = await fetch(apiUrl, {
     method: "get",
@@ -110,40 +105,35 @@ async function validateBearerToken(auth) {
   return expires_in_secs !== NaN ? expires_in_secs : 0;
 }
 
-const foo = (() => {
-  let counter = 0;
-  return () => {
-    counter += 1;
-    console.log(counter);
-  };
-})();
-
 function getEpoch() {
   return parseInt(new Date() / 1000);
 }
 
-async function refreshBearerToken(auth) {
+async function refreshBearerToken(refreshToken) {
   const apiUrl = "https://id.twitch.tv/oauth2/token";
+
+  const clientId = await getClientId();
+  const clientSecret = await getClientSecret();
 
   const response = await fetch(apiUrl, {
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: `grant_type=refresh_token&refresh_token=${auth.refresh_token}
-&client_id=${getClientId()}&client_secret=${getClientSecret()}`,
+    body: `grant_type=refresh_token&refresh_token=${refreshToken}&client_id=${clientId}&client_secret=${clientSecret}`,
   });
 
+  if (response.status >= 400 && response.status <= 499) {
+    GM_setValue(`${PREFIX}auth`, null);
+    GM_setValue(`${PREFIX}clientId`, null);
+    GM_setValue(`${PREFIX}clientSecret`, null);
+  }
   if (response.status !== 200) {
     console.error("API call failed: " + response.status);
     return null;
   }
 
-  const refreshData = await response.json();
-
-  auth.access_token = refreshData.access_token;
-  auth.refresh_token = refreshData.refresh_token;
-  return auth;
+  return response.json();
 }
 
 // Returns an API bearer token, or null on failure.
@@ -151,13 +141,15 @@ async function refreshBearerToken(auth) {
 async function getBearerToken() {
   const fieldName = `${PREFIX}auth`;
 
-  var auth = GM_getValue(fieldName, null);
+  var auth = await GM_getValue(fieldName, null);
 
   if (auth !== null) {
+    auth = JSON.parse(auth);
+    console.assert(auth !== null);
     console.assert(auth.token_type === "bearer");
 
     // As per Twitch docs, apps are required to check token validity at least
-	// once per hour.
+    // once per hour.
     const twitchApiRequiredRevalidateInterval = 60 * 60;
     // If we have less than a minute of validity left, refresh our token
     const minimumSafeUseTime = 60;
@@ -170,45 +162,46 @@ async function getBearerToken() {
       deltaLastValidated < twitchApiRequiredRevalidateInterval &&
       auth.expires_in - deltaLastValidated > minimumSafeUseTime;
 
-    // If it's safe to use the existing token, do it
+    auth.lastValidatedEpoch = getEpoch();
+    GM_setValue(fieldName, JSON.stringify(auth));
+
     if (isSafeToUseExistingToken) {
-      auth.lastValidatedEpoch = getEpoch();
-      GM_setValue(fieldName, auth);
       return auth.access_token;
     }
 
-    // Else, check if it's still valid
     const expirySecs = await validateBearerToken(auth);
     if (expirySecs > minimumSafeUseTime) {
-      auth.lastValidatedEpoch = getEpoch();
-      GM_setValue(fieldName, auth);
       return auth.access_token;
     }
 
-    // We have an existing token but it's no longer valid. Try to refresh
-    auth = await refreshBearerToken(auth);
-    if (auth === null) {
-      console.error("Failed to refresh bearer token");
-      return null;
+    const refreshData = await refreshBearerToken(auth);
+    if (refreshData !== null) {
+      auth.lastValidatedEpoch = getEpoch();
+      auth.access_token = refreshData.access_token;
+      auth.refresh_token = refreshData.refresh_token;
+      GM_setValue(fieldName, JSON.stringify(auth));
+      return auth.access_token;
     }
-
-    auth.lastValidatedEpoch = getEpoch();
-    GM_setValue(fieldName, auth);
-    return auth.access_token;
   }
 
-  // Else, either we don't have a token at all yet; get a new one
   const apiUrl = "https://id.twitch.tv/oauth2/token";
+
+  const clientId = await getClientId();
+  const clientSecret = await getClientSecret();
 
   const response = await fetch(apiUrl, {
     method: "post",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: `client_id=${getClientId()}&client_secret=${getClientSecret()}&
-grant_type=client_credentials`,
+    body: `client_id=${clientId}&client_secret=${clientSecret}&grant_type=client_credentials`,
   });
 
+  if (response.status >= 400 && response.status <= 499) {
+    GM_setValue(`${PREFIX}auth`, null);
+    GM_setValue(`${PREFIX}clientId`, null);
+    GM_setValue(`${PREFIX}clientSecret`, null);
+  }
   if (response.status !== 200) {
     console.error("API call failed: " + response.status);
     return null;
@@ -219,7 +212,7 @@ grant_type=client_credentials`,
   console.assert(auth.expires_in > 0);
 
   auth.lastValidatedEpoch = getEpoch();
-  GM_setValue(fieldName, auth);
+  GM_setValue(fieldName, JSON.stringify(auth));
   return auth.access_token;
 }
 
@@ -231,13 +224,15 @@ async function replaceFuzzyTimestamp() {
   }
 
   const timestampElement = await findTimeStampElement();
-
   const vodDate = await getAccurateTimestamp(vodId);
+
+  if (timestampElement === null) {
+    return;
+  }
   if (vodDate === null) {
     console.error("Failed to get accurate VOD timestamp");
     return;
   }
-
   const accurateDateString = vodDate.toLocaleString();
   timestampElement.textContent += ` (${accurateDateString})`;
   //console.log(`Accurate VOD timestamp: ${accurateDateString}`);
@@ -257,17 +252,16 @@ async function getAccurateTimestamp(vodId) {
     method: "get",
     headers: {
       Authorization: `Bearer ${bearerToken}`,
-      "Client-Id": `${getClientId()}`,
+      "Client-Id": `${await getClientId()}`,
     },
   });
 
-  if (response.status === 401 || response.status === 403) {
-	GM_setValue(`${PREFIX}auth`, null);
-	GM_setValue(`${PREFIX}clientId`, null);
-	GM_setValue(`${PREFIX}clientSecret`, null);
-	return null;
+  if (response.status >= 400 && response.status <= 499) {
+    GM_setValue(`${PREFIX}auth`, null);
+    GM_setValue(`${PREFIX}clientId`, null);
+    GM_setValue(`${PREFIX}clientSecret`, null);
   }
-  else if (response.status !== 200) {
+  if (response.status !== 200) {
     console.error("API call failed: " + response.status);
     return null;
   }
@@ -281,4 +275,8 @@ async function getAccurateTimestamp(vodId) {
   return new Date(data["data"][0]["created_at"]);
 }
 
-replaceFuzzyTimestamp();
+function main() {
+  replaceFuzzyTimestamp();
+}
+
+main();
