@@ -1,3 +1,5 @@
+![Download stats](https://data.jsdelivr.com/v1/package/gh/Rainyan/userscript-twitch-vod-accurate-timestamps/badge?style=flat-square)
+[![CodeQL](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/actions/workflows/codeql.yml/badge.svg?style=flat-square)](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/actions/workflows/codeql.yml)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 # userscript-twitch-vod-accurate-timestamps
