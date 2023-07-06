@@ -48,3 +48,10 @@ Prompt for the secret key:
 ![popup_clientsecret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/9da7892a-4311-4be5-8107-b93606f4c0fa)
 
 And that's it! The fuzzy timestamps should now hopefully get appended with the accurate information.
+
+## Troubleshooting
+* Timestamps aren't being replaced
+  * Please see the developer console for any related error messages, and/or file a new bug issue for the problem
+
+* How to reset the App Client ID or secret?
+  * Temporarily flip the boolean flag at: TODO
