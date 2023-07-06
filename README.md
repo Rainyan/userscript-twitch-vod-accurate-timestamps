@@ -3,7 +3,8 @@ Replace the fuzzy Twitch VOD dates with accurate timestamps.
 
 ## Example
 
-![example](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/59835c57-7119-425f-a922-c1cc667f07e3)
+![example](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/47f83819-eb07-4514-8a69-0ea4fd53e1c3)
+
 
 ## Installation
 
@@ -23,29 +24,25 @@ Note that your app name will have to be unique, and it cannot contain the word "
 
 You can fill the redirect URI as `http://localhost`, and set the category as "Browser Extension".
 
-Example:
-
-![register_twitch_extension_app](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/dbee8816-7aaf-45ce-98b1-9845d998b6d9)
-
+![register_twitch_extension_app](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/080b1dd0-726e-47de-a7ef-cf8ff3ece86b)
 
 2) In your [Twitch developer apps Console](https://dev.twitch.tv/console/apps), **click "Manage"** for your newly created app:
 
-![twitch_app_manage](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/8bc44a93-8cfa-42d0-8351-d921a034aae7)
-
+![twitch_app_manage](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/888a34f4-07a2-4f7b-8110-a0ec5188133a)
 
 3) In the app page, **press "New Secret"**. Now you'll have the app Client ID, and the app Client Secret (do not expose the secret value to others). You need to paste these two values to the extension the first time you use it.
 
-![twitch_app_id_and_secret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/280ac88d-8045-4807-8be8-d596cf2f29b4)
+![twitch_app_id_and_secret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/566a6ae2-8852-4723-9df4-f7fcf99f866d)
 
 4) Go to a Twitch VOD page (any URL that starts with `https://twitch.tv/videos/`). You should see two popup prompts, asking you to fill in the Client ID and Client Secret for the app you just created. Copy-paste these values in the two popups.
 
 Prompt for the Client ID:
 
-![popup_clientid](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/df0629c7-1f56-43a2-b239-51e61ed1446f)
+![popup_clientid](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/c8cfe1de-215c-4bf5-9e7a-4c0364f559eb)
 
 Prompt for the Client Secret:
 
-![popup_clientsecret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/9da7892a-4311-4be5-8107-b93606f4c0fa)
+![popup_clientsecret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/65363b02-a727-4885-b1e8-eac52a65e760)
 
 And that's it! The fuzzy timestamps should now hopefully get appended with the accurate information.
 
