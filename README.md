@@ -54,4 +54,6 @@ And that's it! The fuzzy timestamps should now hopefully get appended with the a
   * Please see the developer console for any related error messages, and/or file a new bug issue for the problem
 
 * How to reset the App Client ID or secret?
-  * Temporarily flip the boolean flag at: TODO
+  * Temporarily flip the boolean flag at:
+    https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/blob/c2d78839b94b4ed9abe91ec99757eefc0e0e1276/twitch_accurate_vod_timestamps.user.js#L20-L23
+    to `(true)` instead of `(false)`, and reload the userscript & website. Remember to undo the change after resetting the values.
