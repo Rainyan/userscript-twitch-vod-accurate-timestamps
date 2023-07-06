@@ -15,17 +15,15 @@
 
 "use strict";
 
-// Set temporarily to true if you need to reset your Twitch API App token(s).
-const RESET_GM_DATA = false;
-
 // Gets user's stored app fieldName data value, or prompts for it if empty.
 function getUserAppData(fieldName) {
-  if (RESET_GM_DATA) {
-    GM_setValue(fieldName, "");
+  // DEBUG
+  if (false) {
+    GM_setValue(fieldName, null);
   }
 
-  var data = GM_getValue(fieldName, "");
-  if (data === "") {
+  var data = GM_getValue(fieldName, null);
+  if (data === null) {
     data = prompt(`Your Twitch API app's registered ${fieldName}: `);
     GM_setValue(fieldName, data);
   }
