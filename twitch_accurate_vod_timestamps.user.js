@@ -117,7 +117,7 @@ function getEpoch() {
 
 // Returns whether a HTTP status code is in the "Client error responses" range
 function isClientError(httpStatusCode) {
-	return httpStatusCode >= 400 && httpStatusCode <= 499;
+  return httpStatusCode >= 400 && httpStatusCode <= 499;
 }
 
 // For a refresh token, will attempt to refresh the associated bearer token.
