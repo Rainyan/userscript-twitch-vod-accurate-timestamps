@@ -1,3 +1,5 @@
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+
 # userscript-twitch-vod-accurate-timestamps
 Userscript for desktop browsers. Replace the fuzzy Twitch VOD dates with accurate timestamps.
 
