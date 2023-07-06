@@ -17,7 +17,7 @@ Tested with Violentmonkey/Firefox, but it should probably work with other usersc
 
 ### Twitch API config
 
-* Register a [new Twitch app here](https://dev.twitch.tv/console/apps/create)
+1) **Register a [new Twitch app here](https://dev.twitch.tv/console/apps/create)**
 
 Note that your app name will have to be unique, and it cannot contain the word "Twitch".
 
@@ -27,3 +27,24 @@ Example:
 
 ![register_twitch_extension_app](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/dbee8816-7aaf-45ce-98b1-9845d998b6d9)
 
+
+2) In your [Twitch developer apps Console](https://dev.twitch.tv/console/apps), **click "Manage"** for your newly created app:
+
+![twitch_app_manage](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/8bc44a93-8cfa-42d0-8351-d921a034aae7)
+
+
+3) In the app page, **press "New Secret"**. Now you'll have the app Client ID, and the app secret key (do not expose this secret value to others). You need to paste these two values to the extension the first time you use it.
+
+![twitch_app_id_and_secret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/280ac88d-8045-4807-8be8-d596cf2f29b4)
+
+4) Go to a Twitch VOD page (any URL that starts with `https://twitch.tv/videos/`). You should see two popup prompts, asking you to fill in the Client ID and secret key for the app you just created. Copy-paste these values in the two popups.
+
+Prompt for theClient ID:
+
+![popup_clientid](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/df0629c7-1f56-43a2-b239-51e61ed1446f)
+
+Prompt for the secret key:
+
+![popup_clientsecret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/9da7892a-4311-4be5-8107-b93606f4c0fa)
+
+And that's it! The fuzzy timestamps should now hopefully get appended with the accurate information.
