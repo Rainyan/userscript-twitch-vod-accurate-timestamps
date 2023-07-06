@@ -1,5 +1,5 @@
 # userscript-twitch-vod-accurate-timestamps
-Replace the fuzzy Twitch VOD dates with accurate timestamps.
+Userscript for desktop browsers. Replace the fuzzy Twitch VOD dates with accurate timestamps.
 
 ## Example
 
