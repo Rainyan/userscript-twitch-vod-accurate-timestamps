@@ -33,17 +33,17 @@ Example:
 ![twitch_app_manage](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/8bc44a93-8cfa-42d0-8351-d921a034aae7)
 
 
-3) In the app page, **press "New Secret"**. Now you'll have the app Client ID, and the app secret key (do not expose this secret value to others). You need to paste these two values to the extension the first time you use it.
+3) In the app page, **press "New Secret"**. Now you'll have the app Client ID, and the app Client Secret (do not expose the secret value to others). You need to paste these two values to the extension the first time you use it.
 
 ![twitch_app_id_and_secret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/280ac88d-8045-4807-8be8-d596cf2f29b4)
 
-4) Go to a Twitch VOD page (any URL that starts with `https://twitch.tv/videos/`). You should see two popup prompts, asking you to fill in the Client ID and secret key for the app you just created. Copy-paste these values in the two popups.
+4) Go to a Twitch VOD page (any URL that starts with `https://twitch.tv/videos/`). You should see two popup prompts, asking you to fill in the Client ID and Client Secret for the app you just created. Copy-paste these values in the two popups.
 
-Prompt for theClient ID:
+Prompt for the Client ID:
 
 ![popup_clientid](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/df0629c7-1f56-43a2-b239-51e61ed1446f)
 
-Prompt for the secret key:
+Prompt for the Client Secret:
 
 ![popup_clientsecret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/9da7892a-4311-4be5-8107-b93606f4c0fa)
 
