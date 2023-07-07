@@ -40,7 +40,7 @@ You can fill the redirect URI as `http://localhost`, and set the category as "Br
 
 ![twitch_app_id_and_secret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/566a6ae2-8852-4723-9df4-f7fcf99f866d)
 
-4) Go to a Twitch VOD page (any URL that starts with `https://twitch.tv/videos/`). You should see two popup prompts, asking you to fill in first the Client ID, and then the Client Secret for the app you just created. Copy-paste these values in the two popups.
+4) Go to a Twitch VOD page (any URL that starts with `https://www.twitch.tv/videos/`). You should see two popup prompts, asking you to fill in first the Client ID, and then the Client Secret for the app you just created. Copy-paste these values in the two popups.
 
 Prompt for the Client ID:
 
