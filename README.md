@@ -50,7 +50,7 @@ Prompt for the Client Secret:
 
 ![popup_clientsecret](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/65363b02-a727-4885-b1e8-eac52a65e760)
 
-And that's it! The fuzzy timestamps should now hopefully get appended with the accurate information.
+And that's it! The "fuzzy" VOD timestamps should now hopefully get appended with the accurate information.
 
 ## Troubleshooting
 * Timestamps aren't being replaced
