@@ -57,6 +57,6 @@ And that's it! The fuzzy timestamps should now hopefully get appended with the a
   * Make sure you aren't hitting any [Twitch API rate limits](https://dev.twitch.tv/docs/api/guide/#twitch-rate-limits) with the app key you are using for the extension
 
 * How to reset the app Client ID or Client Secret values stored by the userscript?
-  * Temporarily flip the boolean flag near the top of the userscript file:
-    https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/blob/c2d78839b94b4ed9abe91ec99757eefc0e0e1276/twitch_accurate_vod_timestamps.user.js#L20-L23
-    to `(true)` instead of `(false)`, and reload the userscript & website. Remember to undo the change after resetting the values.
+  * At least for the ViolentMonkey userscript manager, you can manually edit (or delete) the stored values through the extension's script options page:
+    ![violentmonkey_edit_vals](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/ab0e9556-6296-4662-8e81-a83cbeefd571)
+
