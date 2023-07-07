@@ -22,6 +22,8 @@ Tested with Violentmonkey/Firefox, but it should probably work with other usersc
 
 ### Twitch API config
 
+The userscript needs access to the Twitch API to work properly. Follow the instructions below to generate your own *"Client ID"* and *"Client Secret"* values for this purpose.
+
 1) **Register a [new Twitch app here](https://dev.twitch.tv/console/apps/create)**
 
 Note that your app name will have to be unique, and it cannot contain the word "Twitch".
