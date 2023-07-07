@@ -61,4 +61,5 @@ And that's it! The fuzzy timestamps should now hopefully get appended with the a
 * How to reset the app Client ID or Client Secret values stored by the userscript?
   * At least for the Violentmonkey userscript manager, you can manually edit (or delete) the stored values through the extension's script options page:
     ![violentmonkey_edit_vals](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/ab0e9556-6296-4662-8e81-a83cbeefd571)
+  * For other userscript managers, please see the relevant user manual for help
 
