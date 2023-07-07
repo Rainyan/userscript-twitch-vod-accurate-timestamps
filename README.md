@@ -55,7 +55,7 @@ And that's it! The fuzzy timestamps should now hopefully get appended with the a
 ## Troubleshooting
 * Timestamps aren't being replaced
   * Please see the developer console for any related error messages, and/or [file a new bug](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/issues/new/choose) for the problem
-  * Make sure your Twitch App/API key is still valid
+  * Make sure your Twitch API key (the Client ID & Secret values) is still valid
   * Make sure you aren't hitting any [Twitch API rate limits](https://dev.twitch.tv/docs/api/guide/#twitch-rate-limits) with the app key you are using for the extension
 
 * How to reset the app Client ID or Client Secret values stored by the userscript?
