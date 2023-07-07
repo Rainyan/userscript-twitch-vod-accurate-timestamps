@@ -5,7 +5,7 @@
 // @namespace       TwitchAccurateVodTimestamps
 // @version         0.2.0
 // @author          https://github.com/Rainyan
-// @match           https://www.twitch.tv/videos/*
+// @match           https://www.twitch.tv/*
 // @updateURL       https://cdn.jsdelivr.net/gh/Rainyan/userscript-twitch-vod-accurate-timestamps@main/twitch_accurate_vod_timestamps.user.js
 // @grant           GM_getValue
 // @grant           GM_setValue
@@ -17,6 +17,8 @@
 
 const PREFIX = "VodDateScript-";
 const HTTP_OK = 200;
+
+let abortController;
 
 // Returns a promise of user's stored app fieldName data value.
 // If no such field exists or it's empty, will prompt the user for the value.
@@ -69,7 +71,13 @@ function findTimeStampElement() {
       return resolve(elem);
     }
 
-    const observer = new MutationObserver((mutations) => {
+    if (abortController) {
+      abortController.abort();
+    }
+    abortController = new AbortController();
+    const signal = abortController.signal;
+
+    const observer = new MutationObserver((mutations, { signal }) => {
       elem = getTimeStampElement();
       if (elem !== undefined) {
         resolve(elem);
@@ -107,7 +115,11 @@ async function validateBearerToken(auth) {
 
   const expires_in_secs = parseInt(data.expires_in);
 
-  return expires_in_secs !== NaN ? expires_in_secs : 0;
+  return isNaN(expires_in_secs)
+    ? 0
+    : expires_in_secs >= 0
+    ? expires_in_secs
+    : 0;
 }
 
 // Returns the Unix epoch in whole seconds
@@ -232,21 +244,21 @@ async function getBearerToken() {
 // Asynchronously replaces the fuzzy timestamp with a more precise version as a side effect.
 async function replaceFuzzyTimestamp() {
   const vodId = getVideoId();
-  if (vodId === NaN) {
-    console.error("VOD ID not found");
+  if (isNaN(vodId)) {
     return;
   }
 
   const timestampElement = await findTimeStampElement();
-  const vodDate = await getAccurateTimestamp(vodId);
-
   if (timestampElement === null) {
     return;
   }
+
+  const vodDate = await getAccurateTimestamp(vodId);
   if (vodDate === null) {
     console.error("Failed to get accurate VOD timestamp");
     return;
   }
+
   const accurateDateString = vodDate.toLocaleString();
   timestampElement.textContent += ` (${accurateDateString})`;
   //console.log(`Accurate VOD timestamp: ${accurateDateString}`);
@@ -290,8 +302,18 @@ async function getAccurateTimestamp(vodId) {
 }
 
 // Entry point
-function main() {
-  replaceFuzzyTimestamp();
+async function main() {
+  var url = "";
+  const urlObserver = new MutationObserver((mutations) => {
+    if (url !== document.URL) {
+      replaceFuzzyTimestamp();
+      url = document.URL;
+    }
+  });
+  urlObserver.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
 }
 
 main();
