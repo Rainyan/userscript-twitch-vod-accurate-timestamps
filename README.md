@@ -63,3 +63,6 @@ And that's it! The "fuzzy" VOD timestamps should now hopefully get appended with
     ![violentmonkey_edit_vals](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/ab0e9556-6296-4662-8e81-a83cbeefd571)
   * For other userscript managers, please see the relevant user manual for help
 
+## Contributing
+* PRs are welcome
+  * Please open an issue or discussion before submitting a patch with large changes
