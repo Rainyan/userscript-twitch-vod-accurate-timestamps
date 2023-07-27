@@ -26,7 +26,8 @@ The userscript needs access to the Twitch API to work properly. Follow the instr
 
 1) **Register a [new Twitch app here](https://dev.twitch.tv/console/apps/create)**
 
-Note that your app name will have to be unique, and it cannot contain the word "Twitch".
+> [!NOTE]  
+> Your app name will have to be unique, and it cannot contain the word "Twitch".
 
 You can fill the redirect URI as `http://localhost`, and set the category as "Browser Extension".
 
