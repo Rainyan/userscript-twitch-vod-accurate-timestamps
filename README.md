@@ -26,7 +26,7 @@ The userscript needs access to the Twitch API to work properly. Follow the instr
 
 1) **Register a [new Twitch app here](https://dev.twitch.tv/console/apps/create)**
 
-> [!IMPORTANT]
+> [!IMPORTANT]  
 > Your app name will have to be unique, and it cannot contain the word "Twitch".
 
 You can fill the redirect URI as `http://localhost`, and set the category as "Browser Extension".
@@ -38,7 +38,7 @@ You can fill the redirect URI as `http://localhost`, and set the category as "Br
 ![twitch_app_manage](https://github.com/Rainyan/userscript-twitch-vod-accurate-timestamps/assets/6595066/888a34f4-07a2-4f7b-8110-a0ec5188133a)
 
 > [!WARNING]  
-> Do not expose the secret key value to others
+> Do not expose the secret key value to others.
 
 3) In the app page, **press "New Secret"**. Now you'll have the app Client ID, and the app Client Secret. You need to paste these two values to the extension the first time you use it.
 
