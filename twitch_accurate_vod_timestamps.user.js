@@ -3,9 +3,9 @@
 // @description     Replace the fuzzy dates with accurate timestamps for Twitch VOD videos.
 // @icon            https://www.google.com/s2/favicons?sz=64&domain=twitch.tv
 // @namespace       TwitchAccurateVodTimestamps
-// @version         0.2.1
+// @version         0.2.2
 // @author          https://github.com/Rainyan
-// @match           https://www.twitch.tv/*
+// @match           https://www.twitch.tv/videos/*
 // @updateURL       https://cdn.jsdelivr.net/gh/Rainyan/userscript-twitch-vod-accurate-timestamps@main/twitch_accurate_vod_timestamps.user.js
 // @grant           GM_getValue
 // @grant           GM_setValue
